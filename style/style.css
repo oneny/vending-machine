@@ -49,18 +49,21 @@ body {
 
 /* Commons */
 /* 거스름돈 반환 & 입금 & 획득 버튼 */
-.btn-vendingMachine {
+.btn-balance,
+.btn-credit,
+.btn-get {
   width: 94px;
   padding: 6px 9px;
   border: none;
   background: #FFFFFF;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 3px rgb(0 0 0 / 50%);
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 13px;
   line-height: 19px;
   color: #000;
   border-radius: 5px;
   margin-left: 12px;
+  cursor: pointer;
 }
 
 /* Content */
@@ -87,6 +90,34 @@ body {
   margin-bottom: 20px;
 }
 
+/* 수량 없으면 품절 이미지 넣기 */
+.vending-machine .cont-lists li.sold-out {
+  position: relative;
+  z-index: 1;
+}
+
+.vending-machine .cont-lists li.sold-out::before {
+  content: " ";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  /* background 축약 공부해야겠다... */
+  background-image: url(../img/beverageImg/Sold-out.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 64px 46px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.vending-machine .cont-lists li.sold-out .btn-item {
+  pointer-events: none;
+  position: relative;
+  z-index: -1;
+}
+
 .vending-machine .cont-lists .btn-item {
   width: 100%;
   padding: 8.5px 0;
@@ -98,6 +129,7 @@ body {
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0px 0px 4px rgb(0 0 0 / 50%);
+  cursor: pointer;
 }
 
 .cont-lists .btn-item .img-item {
@@ -201,6 +233,10 @@ body {
   justify-content: space-between;
   font-size: 14px;
   line-height: 20px;
+}
+
+.cont-mymoney .info-mymoneny .txt-mymoney {
+  cursor: pointer;
 }
 
 .my-info .cont-myBeverage {
