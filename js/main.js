@@ -1,11 +1,17 @@
 import beverages from "./beverages.js";
-import { toKRW } from "./utils.js";
+import { toKRW, toNum } from "./utils.js";
 
 const beveragesList = document.querySelector(".cont-lists");
 const txtMyMoneyEl = document.querySelector(".txt-mymoney");
 
+const txtBalanceEl = document.querySelector(".txt-balance");
+const btnBalanceEL = document.querySelector(".btn-balance");
+
+const inpCreditEl = document.querySelector(".inp-credit");
+const btnCredit = document.querySelector(".btn-credit");
+
 // 음료수 목록 만들기
-beverages.forEach(item => {
+beverages.forEach((item) => {
   const beverageItem = document.createElement("li");
   if (!item["quantity"]) beverageItem.classList.add("sold-out");
 
@@ -15,7 +21,7 @@ beverages.forEach(item => {
   beverageId.setAttribute("id", item["id"]);
   beverageId.setAttribute("value", item["id"]);
   beverageItem.appendChild(beverageId);
-  
+
   // 수량 숨겨서
   const beverageQuantity = document.createElement("input");
   beverageQuantity.setAttribute("type", "hidden");
@@ -62,9 +68,28 @@ txtMyMoneyEl.addEventListener("click", (e) => {
     }
 
     // 취소를 눌렀을 경우
-    if (myMoney === null) myMoney = "0";
+    if (myMoney === null) return myMoney = txtMyMoneyEl.textContent;
     break;
   }
 
   e.target.textContent = toKRW(myMoney) + " 원";
 });
+
+// 입금하기
+btnCredit.addEventListener("click", () => {
+  // 입금액을 입력하지 않은 경우
+  if (inpCreditEl.value.length === 0) return alert("입금액을 입력해주세요.");
+
+  const myMoney = parseInt(toNum(txtMyMoneyEl.textContent), 10);
+  const myBalance = parseInt(toNum(txtBalanceEl.textContent), 10);
+
+  if (parseInt(inpCreditEl.value, 10) > myMoney) {
+    alert("소지금이 부족합니다.");
+    return inpCreditEl.value = "";
+  }
+
+  txtBalanceEl.textContent = toKRW(myBalance + parseInt(inpCreditEl.value, 10)) + " 원";
+  txtMyMoneyEl.textContent = toKRW(myMoney - parseInt(inpCreditEl.value, 10)) + " 원";
+  inpCreditEl.value = "";
+});
+

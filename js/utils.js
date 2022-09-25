@@ -2,6 +2,7 @@ export const toKRW = (num) => {
   if (num.length <= 3) return num;
 
   let result = "";
+  num = num.toString();
   for (let i = 0; i < num.length; i++) {
 
     if (i % 3 === 0 && i !== 0) {
@@ -14,3 +15,7 @@ export const toKRW = (num) => {
   
   return result;
 };
+
+export const toNum = (str) => {
+  return str.split(" ")[0].split(",").join("");
+}
