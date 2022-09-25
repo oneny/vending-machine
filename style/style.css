@@ -1,0 +1,52 @@
+/* Resets */
+body, header, h1, h2, main, section, ul, li {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+h1, h2 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+li {
+  list-style-type: none;
+}
+
+/* PC용으로 사용된 이미지 내에서 의미있는 텍스트의 대체텍스트를 제공할 떄 */
+.ir_wa {
+  display: block;
+  overflow: hidden;
+  font-size: 1px;
+  line-height: 0;
+  text-indent: -9999px;
+}
+
+/* Componenets */
+body {
+  background-color: #EAE8FE;
+}
+
+.tit-header {
+  margin-bottom: 67px;
+}
+
+.tit-header .tit-img {
+  max-width: 386px;
+  height: 180px;
+  margin: 0 auto;
+  background-image: url("../img/logo.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Content */
+.cont-main {
+  
+}
+
+.cont-main .cont-section {
+
+}

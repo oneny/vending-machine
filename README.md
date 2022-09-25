@@ -3,8 +3,8 @@
 ### 디자인 시안
 
 <div style="display: flex; height: 300px;">
-  <img src="./img/readmeImg/design1.png" width="50%" alt="디자인 시안1">
-  <img src="./img/readmeImg/design2.png" width="50%" alt="디자인 시안1">
+  <img src="./img/readmeImg/design1.png" width="30%" alt="디자인 시안1">
+  <img src="./img/readmeImg/design2.png" width="30%" alt="디자인 시안1">
 </div>
 
 ### 요구사항 명세
