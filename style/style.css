@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700&display=swap');
+
 /* Resets */
-body, header, h1, h2, main, section, ul, li {
+body, header, h1, h2, main, section, ul, li, button, div, input {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -14,18 +16,21 @@ li {
   list-style-type: none;
 }
 
-/* PC용으로 사용된 이미지 내에서 의미있는 텍스트의 대체텍스트를 제공할 떄 */
-.ir_wa {
+/* PC, 모바일용으로 사용된 이미지 내에서 의미있는 텍스트의 대체텍스트를 제공할 떄 */
+.ir {
   display: block;
   overflow: hidden;
   font-size: 1px;
   line-height: 0;
   text-indent: -9999px;
+  color: transparent;
 }
 
 /* Componenets */
 body {
   background-color: #EAE8FE;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
 }
 
 .tit-header {
@@ -42,11 +47,102 @@ body {
   background-position: center;
 }
 
-/* Content */
-.cont-main {
-  
+/* Commons */
+/* 거스름돈 반환 & 입금 & 획득 버튼 */
+.btn-vendingMachine {
+  width: 94px;
+  padding: 6px 9px;
+  border: none;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  line-height: 19px;
+  color: #000;
+  border-radius: 5px;
+  margin-left: 12px;
 }
 
-.cont-main .cont-section {
+/* Content */
+.cont-main {
+  display: flex;
+  justify-content: center;
+}
 
+.cont-main .vending-machine {
+  padding: 30px 27px;
+  margin-right: 28px; /* 자판기 화면과 나의 정보 화면 간격 */
+}
+
+/* Vending-machine Section */
+.vending-machine {
+  background-color: #fff;
+}
+
+/* 잔액&거스름돈 */
+.vending-machine .cont-balance {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 11px;
+}
+
+.vending-machine .cont-balance .info-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  height: 33px;
+  background-color: #EAE8FE;
+  padding: 6px 10px;
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 5px;
+}
+
+/* 입금 */
+.vending-machine .cont-credit {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 11px;
+}
+
+.vending-machine .cont-credit .inp-credit {
+  width: 200px;
+  height: 33px;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.vending-machine .cont-credit .inp-credit::placeholder {
+  color: #bdbdbd;
+}
+
+/* 카트 */
+.vending-machine .cont-cart {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vending-machine .cont-cart .list-cart {
+  width: 200px;
+  height: 106px;
+  background-color: #EAE8FE;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.vending-machine .cont-cart .btn-get {
+  height: 106px;
+  background-color: #6327fe;
+  color: #fff;
+}
+
+/* My-info Section */
+.my-info {
+  background-color: #fff;
 }
