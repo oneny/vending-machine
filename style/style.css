@@ -92,6 +92,7 @@ body {
 
 /* 수량 없으면 품절 이미지 넣기 */
 .vending-machine .cont-lists li.sold-out {
+  pointer-events: none; /* 재고 없으면 이벤트 발생하지 않게 */
   position: relative;
   z-index: 1;
 }
@@ -113,7 +114,6 @@ body {
 }
 
 .vending-machine .cont-lists li.sold-out .btn-item {
-  pointer-events: none;
   position: relative;
   z-index: -1;
 }
