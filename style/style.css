@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700&display=swap');
 
 /* Resets */
-body, header, h1, h2, main, section, ul, li, button, div, input, span, strong {
+body, header, h1, h2, h3, main, section, ul, li, button, div, input, span, strong {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-h1, h2 {
+h1, h2, h3 {
   font-size: inherit;
   font-weight: inherit;
 }
@@ -121,7 +121,7 @@ body {
   border-radius: 50px;
 }
 
-/* 잔액&거스름돈 */
+/* 잔액 & 거스름돈 */
 .vending-machine .cont-balance {
   display: flex;
   justify-content: space-between;
@@ -185,6 +185,47 @@ body {
 }
 
 /* My-info Section */
-.my-info {
+.my-info .cont-mymoney {
   background-color: #fff;
+  padding: 9px 27px;
+  margin-bottom: 20px;
+}
+
+/* 소지금 */
+.my-info .cont-mymoney .info-mymoneny {
+  width: 306px;
+  background-color: #EAE8FE;
+  padding: 6px 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.my-info .cont-myBeverage {
+  background-color: #fff;
+  text-align: center;
+  padding: 25px 27px 31px;
+}
+
+/* 횓득한 음료 제목 */
+.my-info .cont-myBeverage .tit-myBeverage {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 13px; 
+}
+
+/* 내 음료 목록 */
+.my-info .cont-myBeverage .cont-myBeverageList {
+  height: 364px;
+  background-color: #EAE8FE;
+  margin-bottom: 6px;
+}
+
+/* 내가 산 음료가격 */
+.my-info .cont-myBeverage .cont-totalPrice {
+  text-align: right;
+  font-size: 12px;
+  line-height: 17px;
 }
