@@ -222,8 +222,8 @@ function updateCartListItem() {
   // 카트 아이템이 들어오면 가장 최신 카트 아이템에 이벤트 리스너 설정
   const lastedCartItem = cartListItem[cartListItem.length - 1];
   const beverageIdInCart = lastedCartItem
-    .querySelector(".beverageIdInCart")
-    .getAttribute("id");
+    .querySelector(".beverageIdInCart").value;
+
   const beverageNameInCart =
     lastedCartItem.querySelector(".cart-name").textContent;
   const beravegeQuantityInCart = lastedCartItem.querySelector(".cart-quantity");
@@ -269,7 +269,7 @@ btnGetEl.addEventListener("click", () => {
 
   // 획득한 음료가 만약 목록에 있으면 수량만 올리고 아니면 리스트에 추가
   cartItems.forEach((el) => {
-    const beverageIdInCart = el.querySelector(".beverageIdInCart");
+    const beverageId = el.querySelector(".beverageIdInCart").value;
     const beverageName = el.querySelector(".cart-name").textContent;
     const beverageSource = el.querySelector("img").src;
     const beveragePrice = el.querySelector(".beveragePriceInCart").value;
@@ -280,7 +280,7 @@ btnGetEl.addEventListener("click", () => {
     let changeQuantity = false;
     for (let i = 0; i < myBeveragesList.length; i++) {
       if (
-        myBeveragesList[i]["beverageId"] === beverageIdInCart.getAttribute("id")
+        myBeveragesList[i]["beverageId"] === beverageId
       ) {
         myBeveragesList[i]["beverageQuantity"] =
           parseInt(myBeveragesList[i]["beverageQuantity"], 10) +
@@ -292,7 +292,7 @@ btnGetEl.addEventListener("click", () => {
     // myBeverageList에서 없다면 추가
     if (!changeQuantity) {
       myBeveragesList.push({
-        beverageId: beverageIdInCart.id,
+        beverageId,
         beverageName,
         beverageSource,
         beveragePrice: parseInt(beveragePrice, 10),
