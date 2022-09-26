@@ -17,6 +17,9 @@ const btnCreditEl = document.querySelector(".btn-credit");
 const listCartEl = document.querySelector(".list-cart");
 const btnGetEl = document.querySelector(".btn-get");
 
+// 총금액
+const txtTotalPriceEl = document.querySelector(".txt-totalPrice");
+
 // 내가 획득한 음료
 const myBeveragesList = [];
 
@@ -55,7 +58,7 @@ beverages.forEach((item) => {
 
   // 이름
   const beverageName = document.createElement("strong");
-  beverageName.textContent = item["name"].split("_").join(" ");
+  beverageName.textContent = item["name"];
   beverageName.classList.add("name-item");
   beverageBtn.appendChild(beverageName);
 
@@ -90,7 +93,7 @@ txtMyMoneyEl.addEventListener("click", (e) => {
 });
 
 // 입금하기
-btnCreditEl.addEventListener("click", () => {
+function deposit() {
   // 소지금, 잔액
   const myMoney = toNum(txtMyMoneyEl.textContent);
   const myBalance = toNum(txtBalanceEl.textContent);
@@ -108,7 +111,13 @@ btnCreditEl.addEventListener("click", () => {
   txtMyMoneyEl.textContent =
     toKRW(myMoney - parseInt(inpCreditEl.value, 10)) + " 원";
   inpCreditEl.value = "";
+}
+
+btnCreditEl.addEventListener("click", deposit);
+inpCreditEl.addEventListener("keyup", (e) => {
+  if (e.keyCode === 13) deposit();
 });
+
 
 // 거스름돈 반환
 btnBalanceEL.addEventListener("click", () => {
@@ -192,7 +201,7 @@ beverageItemEL.forEach((el) => {
       const name = el.querySelector(".name-item").textContent;
       const cartName = document.createElement("strong");
       cartName.classList.add("cart-name");
-      cartName.textContent = name.split(" ").join("_");
+      cartName.textContent = name;
       cartItem.appendChild(cartName);
 
       // 수량 넣기
@@ -292,10 +301,9 @@ btnGetEl.addEventListener("click", () => {
       });
     }
 
-    // 카트 리스트에서 아이템 제거
+    // 카트 리스트에서 카트 아이템 제거
     listCartEl.removeChild(el);
   });
-
 
   // 획득한 음료 리스트에 엘리먼트 렌더링
   renderMyBeverageList();
@@ -309,6 +317,7 @@ function renderMyBeverageList() {
   }
 
   // 다시 리렌더링
+  let myTotalPrice = 0;
   myBeveragesList.forEach((item) => {
     const myBeverageLi = document.createElement("li");
     myBeverageLi.classList.add("item-myBeverage");
@@ -329,5 +338,10 @@ function renderMyBeverageList() {
     myBeverageLi.appendChild(myBeverageQuantityEl);
 
     contMyBeverageListEl.appendChild(myBeverageLi);
+
+    // 내가 구매한 총가격 구하기
+    myTotalPrice = myTotalPrice + item["beverageQuantity"] * item["beveragePrice"];
   });
+
+  txtTotalPriceEl.textContent = toKRW(myTotalPrice);
 }
