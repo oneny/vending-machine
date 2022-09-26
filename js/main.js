@@ -32,6 +32,7 @@ beverages.forEach((item) => {
   const beverageQuantity = document.createElement("input");
   beverageQuantity.setAttribute("type", "hidden");
   beverageQuantity.setAttribute("class", "quantity");
+  beverageQuantity.setAttribute("id", item["id"] + item["name"]);
   beverageQuantity.setAttribute("value", item["quantity"]);
   beverageItem.appendChild(beverageQuantity);
 
@@ -89,7 +90,7 @@ btnCreditEl.addEventListener("click", () => {
 
   // 입금액을 입력하지 않은 경우
   if (inpCreditEl.value.length === 0) return alert("입금액을 입력해주세요.");
-  
+
   if (parseInt(inpCreditEl.value, 10) > myMoney) {
     alert("소지금이 부족합니다.");
     return (inpCreditEl.value = "");
@@ -105,7 +106,7 @@ btnCreditEl.addEventListener("click", () => {
 // 거스름돈 반환
 btnBalanceEL.addEventListener("click", () => {
   const myBalance = parseInt(toNum(txtBalanceEl.textContent), 10);
-  
+
   // 0이면 아래 더 실행안되게
   if (myBalance === 0) return;
 
@@ -121,6 +122,14 @@ const beverageItemEL = beveragesList.querySelectorAll("li");
 
 beverageItemEL.forEach((el) => {
   el.addEventListener("click", (e) => {
+    // 재고가 없으면 자판기에 카트에 못담게 하기
+    const beverageQuantity = el.querySelector(".quantity");
+    if (beverageQuantity.value <= 0)
+      return alert("자판기에 남는 재고가 없습니다.");
+
+    // 자판기 수량 내리고 0개 되면 품절 스티커 붙이기
+    beverageQuantity.value = parseInt(beverageQuantity.value, 10) - 1;
+    if (beverageQuantity.value <= 0) el.classList.add("sold-out");
 
     // 이미 리스트에 있으면 수량만 올려주기
     const beverageCartItem = document.querySelectorAll(".cart-item");
@@ -129,22 +138,21 @@ beverageItemEL.forEach((el) => {
       beverageCartItem.forEach((cartItem) => {
         // 자판기의 음료id와 카트의 음료id를 가져와서 있는지 확인하기
         const beverageId = el.querySelector(".beverageId").getAttribute("id");
-        const beverageIdInCart = cartItem.querySelector(".beverageIdInCart").getAttribute("id");
+        const beverageIdInCart = cartItem
+          .querySelector(".beverageIdInCart")
+          .getAttribute("id");
 
         if (beverageId === beverageIdInCart) {
           let cartQuantity = cartItem.querySelector(".cart-quantity");
-          console.log(cartQuantity);
+          console.log(cartQuantity.textContent);
           cartQuantity.textContent = parseInt(cartQuantity.textContent, 10) + 1;
           change = true;
         }
       });
     }
 
-    // 재고가 없으면 자판기에 카트에 못담게 하기
-    const beverageQuantity = el.querySelector(".quantity").value;
-    if (beverageQuantity <= 0) {
-      return alert("자판기에 남는 재고가 없습니다.");
-    } else if (!change) {
+    // 카트 리스트에 없는 경우
+    if (!change) {
       const cartItem = document.createElement("li");
       cartItem.classList.add("cart-item");
 
@@ -165,16 +173,45 @@ beverageItemEL.forEach((el) => {
       // 음료 이름 넣기
       const name = el.querySelector(".name-item").textContent;
       const cartName = document.createElement("strong");
+      cartName.classList.add("cart-name");
       cartName.textContent = name;
       cartItem.appendChild(cartName);
 
       // 수량
       const cartItemQuantity = document.createElement("span");
       cartItemQuantity.classList.add("cart-quantity");
-      cartItemQuantity.textContent = 0;
+      cartItemQuantity.textContent = 1;
       cartItem.appendChild(cartItemQuantity);
 
       listCartEl.append(cartItem);
+      updateCartListItem();
     }
   });
-})
+});
+
+// 카트 리스트 수량 내리고 자판기 수량 올리고 카트 리스트 아이템의 수량 0이 되면 제거
+function updateCartListItem() {
+  const cartListItem = listCartEl.querySelectorAll("li");
+
+  // 카트 아이템이 들어오면 가장 최신 카트 아이템에 이벤트 리스너 설정
+  const lastedCartItem = cartListItem[cartListItem.length - 1];
+  const beverageIdInCart = lastedCartItem.querySelector(".beverageIdInCart").getAttribute("id");
+  const beverageNameInCart = lastedCartItem.querySelector(".cart-name").textContent;
+  const beravegeQuantityInCart = lastedCartItem.querySelector(".cart-quantity");
+
+  // 벤딩 아이템의 수량 input을 찾아서 value값 증가 및 카트 아이템의 수량 감소
+  lastedCartItem.addEventListener("click", () => {
+    const vendingItemQuantity = document.querySelector("#" + beverageIdInCart + beverageNameInCart);
+    vendingItemQuantity.value = parseInt(vendingItemQuantity.value, 10) + 1;
+    beravegeQuantityInCart.textContent = parseInt(beravegeQuantityInCart.textContent, 10) - 1;
+
+    // 만약 카트 아이템의 수량이 0이 되면 카트 리스트에서 제거
+    if (beravegeQuantityInCart.textContent === "0") {
+      listCartEl.removeChild(lastedCartItem);
+    }
+    if (vendingItemQuantity.value > 0) {
+      vendingItemQuantity.parentNode.classList.remove("sold-out");
+    }
+  });
+}
+
