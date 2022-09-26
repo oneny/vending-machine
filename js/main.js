@@ -15,6 +15,13 @@ const btnCreditEl = document.querySelector(".btn-credit");
 
 // 카트
 const listCartEl = document.querySelector(".list-cart");
+const btnGetEl = document.querySelector(".btn-get");
+
+// 내가 획득한 음료
+const myBeveragesList = [];
+
+// 내가 획득한 음료 리스트
+const contMyBeverageListEl = document.querySelector(".cont-myBeverageList");
 
 // 음료수 목록 만들기
 beverages.forEach((item) => {
@@ -48,7 +55,7 @@ beverages.forEach((item) => {
 
   // 이름
   const beverageName = document.createElement("strong");
-  beverageName.textContent = item["name"];
+  beverageName.textContent = item["name"].split("_").join(" ");
   beverageName.classList.add("name-item");
   beverageBtn.appendChild(beverageName);
 
@@ -85,8 +92,8 @@ txtMyMoneyEl.addEventListener("click", (e) => {
 // 입금하기
 btnCreditEl.addEventListener("click", () => {
   // 소지금, 잔액
-  const myMoney = parseInt(toNum(txtMyMoneyEl.textContent), 10);
-  const myBalance = parseInt(toNum(txtBalanceEl.textContent), 10);
+  const myMoney = toNum(txtMyMoneyEl.textContent);
+  const myBalance = toNum(txtBalanceEl.textContent);
 
   // 입금액을 입력하지 않은 경우
   if (inpCreditEl.value.length === 0) return alert("입금액을 입력해주세요.");
@@ -105,15 +112,15 @@ btnCreditEl.addEventListener("click", () => {
 
 // 거스름돈 반환
 btnBalanceEL.addEventListener("click", () => {
-  const myBalance = parseInt(toNum(txtBalanceEl.textContent), 10);
+  const myBalance = toNum(txtBalanceEl.textContent);
 
   // 0이면 아래 더 실행안되게
   if (myBalance === 0) return;
 
-  const myMoney = parseInt(toNum(txtMyMoneyEl.textContent), 10);
+  const myMoney = toNum(txtMyMoneyEl.textContent);
 
   txtBalanceEl.textContent = "0 원";
-  txtMyMoneyEl.textContent = toKRW(myBalance + myMoney);
+  txtMyMoneyEl.textContent = toKRW(myBalance + myMoney) + " 원";
 });
 
 // 카트 넣기
@@ -164,6 +171,17 @@ beverageItemEL.forEach((el) => {
       beverageIdInCart.setAttribute("class", "beverageIdInCart");
       cartItem.appendChild(beverageIdInCart);
 
+      // 가격 넣기
+      const beveragePrice = el.querySelector(".price-item").textContent;
+      const beveragePriceInCart = document.createElement("input");
+      beveragePriceInCart.setAttribute("type", "hidden");
+      beveragePriceInCart.setAttribute("class", "beveragePriceInCart");
+      beveragePriceInCart.setAttribute(
+        "value",
+        beveragePrice.slice(0, beveragePrice.length - 1)
+      );
+      cartItem.appendChild(beveragePriceInCart);
+
       // 이미지 넣기
       const img = el.querySelector(".img-item").getAttribute("src");
       const cartImg = document.createElement("img");
@@ -174,10 +192,10 @@ beverageItemEL.forEach((el) => {
       const name = el.querySelector(".name-item").textContent;
       const cartName = document.createElement("strong");
       cartName.classList.add("cart-name");
-      cartName.textContent = name;
+      cartName.textContent = name.split(" ").join("_");
       cartItem.appendChild(cartName);
 
-      // 수량
+      // 수량 넣기
       const cartItemQuantity = document.createElement("span");
       cartItemQuantity.classList.add("cart-quantity");
       cartItemQuantity.textContent = 1;
@@ -195,15 +213,21 @@ function updateCartListItem() {
 
   // 카트 아이템이 들어오면 가장 최신 카트 아이템에 이벤트 리스너 설정
   const lastedCartItem = cartListItem[cartListItem.length - 1];
-  const beverageIdInCart = lastedCartItem.querySelector(".beverageIdInCart").getAttribute("id");
-  const beverageNameInCart = lastedCartItem.querySelector(".cart-name").textContent;
+  const beverageIdInCart = lastedCartItem
+    .querySelector(".beverageIdInCart")
+    .getAttribute("id");
+  const beverageNameInCart =
+    lastedCartItem.querySelector(".cart-name").textContent;
   const beravegeQuantityInCart = lastedCartItem.querySelector(".cart-quantity");
 
   // 벤딩 아이템의 수량 input을 찾아서 value값 증가 및 카트 아이템의 수량 감소
   lastedCartItem.addEventListener("click", () => {
-    const vendingItemQuantity = document.querySelector("#" + beverageIdInCart + beverageNameInCart);
+    const vendingItemQuantity = document.querySelector(
+      "#" + beverageIdInCart + beverageNameInCart
+    );
     vendingItemQuantity.value = parseInt(vendingItemQuantity.value, 10) + 1;
-    beravegeQuantityInCart.textContent = parseInt(beravegeQuantityInCart.textContent, 10) - 1;
+    beravegeQuantityInCart.textContent =
+      parseInt(beravegeQuantityInCart.textContent, 10) - 1;
 
     // 만약 카트 아이템의 수량이 0이 되면 카트 리스트에서 제거
     if (beravegeQuantityInCart.textContent === "0") {
@@ -215,3 +239,95 @@ function updateCartListItem() {
   });
 }
 
+// 내가 획득한 음료 구현(획득 버튼 구현)
+btnGetEl.addEventListener("click", () => {
+  const cartItems = document.querySelectorAll(".cart-item");
+  const myBalance = toNum(txtBalanceEl.textContent.split(" ")[0]); // 내 잔액
+
+  // 총 가격 비교하고 아니면 그냥 리턴
+  let totalPrice = 0; // 총 가격 가져오기
+  cartItems.forEach((el) => {
+    const price = el.querySelector(".beveragePriceInCart").value;
+    const quantity = el.querySelector(".cart-quantity").textContent;
+    // 총가격
+    totalPrice =
+      parseInt(totalPrice, 10) + parseInt(price, 10) * parseInt(quantity, 10);
+  });
+  
+  if (myBalance < totalPrice) return alert("소지금이 부족합니다");
+
+  // 잔액에서 총 구매가격 빼기
+  txtBalanceEl.textContent = toKRW(myBalance - totalPrice) + " 원";
+
+  // 획득한 음료가 만약 목록에 있으면 수량만 올리고 아니면 리스트에 추가
+  cartItems.forEach((el) => {
+    const beverageIdInCart = el.querySelector(".beverageIdInCart");
+    const beverageName = el.querySelector(".cart-name").textContent;
+    const beverageSource = el.querySelector("img").src;
+    const beveragePrice = el.querySelector(".beveragePriceInCart").value;
+    const beverageQuantityInCart =
+      el.querySelector(".cart-quantity").textContent;
+
+    // myBeveragesList 루프 돌면서 같은 아이디 있으면 카트에 있는 수량만 증가
+    let changeQuantity = false;
+    for (let i = 0; i < myBeveragesList.length; i++) {
+      if (
+        myBeveragesList[i]["beverageId"] === beverageIdInCart.getAttribute("id")
+      ) {
+        myBeveragesList[i]["beverageQuantity"] =
+          parseInt(myBeveragesList[i]["beverageQuantity"], 10) +
+          parseInt(beverageQuantityInCart, 10);
+        changeQuantity = true;
+      }
+    }
+
+    // myBeverageList에서 없다면 추가
+    if (!changeQuantity) {
+      myBeveragesList.push({
+        beverageId: beverageIdInCart.id,
+        beverageName,
+        beverageSource,
+        beveragePrice: parseInt(beveragePrice, 10),
+        beverageQuantity: parseInt(beverageQuantityInCart, 10),
+      });
+    }
+
+    // 카트 리스트에서 아이템 제거
+    listCartEl.removeChild(el);
+  });
+
+
+  // 획득한 음료 리스트에 엘리먼트 렌더링
+  renderMyBeverageList();
+});
+
+// 획득한 음료 리스트 렌더링
+function renderMyBeverageList() {
+  // 음료 리스트 제거
+  while (contMyBeverageListEl.hasChildNodes()) {
+    contMyBeverageListEl.removeChild(contMyBeverageListEl.firstChild);
+  }
+
+  // 다시 리렌더링
+  myBeveragesList.forEach((item) => {
+    const myBeverageLi = document.createElement("li");
+    myBeverageLi.classList.add("item-myBeverage");
+
+    const myBeverageImgEl = document.createElement("img");
+    myBeverageImgEl.classList.add("img-myBeverage");
+    myBeverageImgEl.src = item["beverageSource"];
+    myBeverageLi.appendChild(myBeverageImgEl);
+
+    const myBeverageNameEl = document.createElement("strong");
+    myBeverageNameEl.classList.add("name-myBeverage");
+    myBeverageNameEl.textContent = item["beverageName"];
+    myBeverageLi.appendChild(myBeverageNameEl);
+
+    const myBeverageQuantityEl = document.createElement("span");
+    myBeverageQuantityEl.classList.add("quantity-myBeverage");
+    myBeverageQuantityEl.textContent = item["beverageQuantity"];
+    myBeverageLi.appendChild(myBeverageQuantityEl);
+
+    contMyBeverageListEl.appendChild(myBeverageLi);
+  });
+}

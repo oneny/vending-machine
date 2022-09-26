@@ -17,5 +17,5 @@ export const toKRW = (num) => {
 };
 
 export const toNum = (str) => {
-  return str.split(" ")[0].split(",").join("");
+  return parseInt(str.split(" ")[0].split(",").join(""), 10);
 }

@@ -298,6 +298,7 @@ body {
   border-radius: 5px;
   border: 1px solid #bdbdbd;
   margin-bottom: 6px;
+  overflow: auto;
 }
 
 /* 내가 산 음료가격 */
