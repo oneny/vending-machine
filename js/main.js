@@ -155,8 +155,7 @@ beverageItemEL.forEach((el) => {
         // 자판기의 음료id와 카트의 음료id를 가져와서 있는지 확인하기
         const beverageId = el.querySelector(".beverageId").getAttribute("id");
         const beverageIdInCart = cartItem
-          .querySelector(".beverageIdInCart")
-          .getAttribute("id");
+          .querySelector(".beverageIdInCart").value;
 
         if (beverageId === beverageIdInCart) {
           let cartQuantity = cartItem.querySelector(".cart-quantity");
@@ -176,7 +175,7 @@ beverageItemEL.forEach((el) => {
       const beverageId = el.querySelector(".beverageId").getAttribute("id");
       const beverageIdInCart = document.createElement("input");
       beverageIdInCart.setAttribute("type", "hidden");
-      beverageIdInCart.setAttribute("id", beverageId);
+      beverageIdInCart.setAttribute("value", beverageId);
       beverageIdInCart.setAttribute("class", "beverageIdInCart");
       cartItem.appendChild(beverageIdInCart);
 
