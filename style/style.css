@@ -294,11 +294,48 @@ body {
 /* 내 음료 목록 */
 .my-info .cont-myBeverage .cont-myBeverageList {
   height: 364px;
+  padding: 12px 18px 12px 12px;
   background-color: #EAE8FE;
   border-radius: 5px;
   border: 1px solid #bdbdbd;
   margin-bottom: 6px;
   overflow: auto;
+}
+
+.cont-myBeverage .cont-myBeverageList .item-myBeverage {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 6px 10px 7px;
+  position: relative;
+  border-radius: 5px;
+}
+
+.cont-myBeverage .cont-myBeverageList .item-myBeverage + .item-myBeverage {
+  margin-top: 12px;
+}
+
+.cont-myBeverageList .item-myBeverage .img-myBeverage {
+  width: 18px;
+  height: 33px;
+  margin-right: 10px;
+}
+
+.cont-myBeverageList .item-myBeverage .name-myBeverage {
+  font-size: 9px;
+  line-height: 13px;
+  color: #333;
+  font-weight: 500;
+}
+
+.cont-myBeverageList .item-myBeverage .quantity-myBeverage {
+  padding: 4px 11px 6px;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
 }
 
 /* 내가 산 음료가격 */
