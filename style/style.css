@@ -7,7 +7,7 @@ body, header, h1, h2, h3, main, section, ul, li, button, div, input, span, stron
   box-sizing: border-box;
 }
 
-h1, h2, h3 {
+h1, h2, h3, strong {
   font-size: inherit;
   font-weight: inherit;
 }
@@ -94,10 +94,9 @@ body {
 .vending-machine .cont-lists li.sold-out {
   pointer-events: none; /* 재고 없으면 이벤트 발생하지 않게 */
   position: relative;
-  z-index: 1;
 }
 
-.vending-machine .cont-lists li.sold-out::before {
+.vending-machine .cont-lists li.sold-out::after {
   content: " ";
   width: 100%;
   height: 100%;
@@ -113,11 +112,6 @@ body {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.vending-machine .cont-lists li.sold-out .btn-item {
-  position: relative;
-  z-index: -1;
-}
-
 .vending-machine .cont-lists .btn-item {
   width: 100%;
   padding: 8.5px 0;
@@ -130,6 +124,11 @@ body {
   background-color: #fff;
   box-shadow: 0px 0px 4px rgb(0 0 0 / 50%);
   cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+
+.vending-machine .cont-lists .btn-item:hover {
+  box-shadow: 0px 0px 0px 3px #6327fe;
 }
 
 .cont-lists .btn-item .img-item {
@@ -140,11 +139,13 @@ body {
 
 .cont-lists .btn-item .name-item {
   font-size: 9px;
+  font-weight: 500;
   line-height: 13px;
   margin-bottom: 7px;
 }
 
 .cont-lists .btn-item .price-item {
+  width: 70px;
   padding: 5px 15px;
   font-size: 12px;
   line-height: 100%;
@@ -164,7 +165,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
+  flex-grow: 1;
   height: 33px;
   background-color: #EAE8FE;
   padding: 6px 10px;
@@ -181,7 +182,7 @@ body {
 }
 
 .vending-machine .cont-credit .inp-credit {
-  width: 200px;
+  flex-grow: 1;
   height: 33px;
   padding: 5px;
   background-color: #fff;
@@ -202,7 +203,7 @@ body {
 }
 
 .vending-machine .cont-cart .list-cart {
-  width: 200px;
+  width: 200px; /* flex-grow로 늘리고 싶지만 오른쪽 수량이 absolute라 겹쳐진다 */
   height: 106px;
   background-color: #EAE8FE;
   border: 1px solid #bdbdbd;
@@ -234,6 +235,7 @@ body {
 
 .list-cart .cart-item .cart-name {
   font-size: 9px;
+  font-weight: 500;
   line-height: 13px;
   color: #333;
 }
@@ -343,4 +345,68 @@ body {
   text-align: right;
   font-size: 12px;
   line-height: 17px;
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    background-color: #fff;
+  }
+
+  .tit-header {
+    margin-bottom: 18px;
+  }
+
+  .tit-header .tit-img {
+    width: calc(166px * 2);
+    height: calc(71px * 2);
+  }
+
+  .cont-main {
+    margin: 0 60px;
+    flex-direction: column;
+  }
+
+  .cont-main .vending-machine {
+    margin-right: 0;
+  }
+
+  .vending-machine .cont-cart .list-cart {
+    flex-grow: 1;
+  }
+
+  .my-info .cont-mymoney .info-mymoneny {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .cont-main {
+    margin: 0 20px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .tit-header .tit-img {
+    width: 166px;
+    height: 71px;
+  }
+
+  .cont-main .vending-machine {
+    padding: 0 27px;
+    margin-bottom: 11px;
+  }
+
+  .cont-main {
+    margin: 0;
+  }
+
+  .cont-lists .btn-item .img-item {
+    width: 36px;
+    height: 65px;
+  }
+
+  .my-info .cont-myBeverage {
+    padding: 11px 27px 43px;
+  }
+  
 }
