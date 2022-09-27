@@ -1,8 +1,10 @@
 import beverages from "./beverages.js";
 import { toKRW, toNum } from "./utils.js";
 
-// 거스름돈
+// 음료수 목록
 const beveragesList = document.querySelector(".cont-lists");
+
+// 소지금
 const txtMyMoneyEl = document.querySelector(".txt-mymoney");
 
 // 잔돈
@@ -73,7 +75,7 @@ beverages.forEach((item) => {
 });
 
 // 소지금 입력하기
-txtMyMoneyEl.addEventListener("click", (e) => {
+function inputMyOwnMoney() {
   let myMoney = prompt("소지금을 입력해주세요!");
 
   while (true) {
@@ -89,8 +91,10 @@ txtMyMoneyEl.addEventListener("click", (e) => {
     break;
   }
 
-  e.target.textContent = toKRW(myMoney) + " 원";
-});
+  txtMyMoneyEl.textContent = toKRW(myMoney) + " 원";
+}
+
+txtMyMoneyEl.addEventListener("click", inputMyOwnMoney);
 
 // 입금하기
 function deposit() {
@@ -101,9 +105,14 @@ function deposit() {
   // 입금액을 입력하지 않은 경우
   if (inpCreditEl.value.length === 0) return alert("입금액을 입력해주세요.");
 
+  // 입금액이 소지금보다 큰 경우
   if (parseInt(inpCreditEl.value, 10) > myMoney) {
-    alert("소지금이 부족합니다.");
-    return (inpCreditEl.value = "");
+    const cf = confirm("소지금이 부족합니다. 소지금을 입력 및 수정하시겠습니까?");
+    if (cf) {
+      inputMyOwnMoney(); // 소지금 입력하기
+    }
+
+    return (inpCreditEl.value = ""); // 다시 빈 칸
   }
 
   txtBalanceEl.textContent =
