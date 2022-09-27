@@ -31,12 +31,12 @@ const contMyBeverageListEl = document.querySelector(".cont-myBeverageList");
 // 음료수 목록 만들기
 beverages.forEach((item) => {
   const beverageItem = document.createElement("li");
-  if (!item["quantity"]) beverageItem.classList.add("sold-out");
+  if (!item.quantity) beverageItem.classList.add("sold-out");
 
   // 아이디 숨겨서
   const beverageId = document.createElement("input");
   beverageId.setAttribute("type", "hidden");
-  beverageId.setAttribute("id", item["id"]);
+  beverageId.setAttribute("id", item.id);
   beverageId.setAttribute("class", "beverageId");
   beverageItem.appendChild(beverageId);
 
@@ -44,8 +44,8 @@ beverages.forEach((item) => {
   const beverageQuantity = document.createElement("input");
   beverageQuantity.setAttribute("type", "hidden");
   beverageQuantity.setAttribute("class", "quantity");
-  beverageQuantity.setAttribute("id", item["id"] + item["name"]);
-  beverageQuantity.setAttribute("value", item["quantity"]);
+  beverageQuantity.setAttribute("id", item.id + item.name);
+  beverageQuantity.setAttribute("value", item.quantity);
   beverageItem.appendChild(beverageQuantity);
 
   // 버튼 만들고 그 안에 이미지, 이름, 가격 넣기
@@ -54,19 +54,19 @@ beverages.forEach((item) => {
 
   // 이미지
   const beverageImg = document.createElement("img");
-  beverageImg.setAttribute("src", item["source"]);
+  beverageImg.setAttribute("src", item.source);
   beverageImg.classList.add("img-item");
   beverageBtn.appendChild(beverageImg);
 
   // 이름
   const beverageName = document.createElement("strong");
-  beverageName.textContent = item["name"];
+  beverageName.textContent = item.name;
   beverageName.classList.add("name-item");
   beverageBtn.appendChild(beverageName);
 
   // 가격
   const beveragePrice = document.createElement("span");
-  beveragePrice.textContent = item["price"] + "원";
+  beveragePrice.textContent = item.price + "원";
   beveragePrice.classList.add("price-item");
   beverageBtn.appendChild(beveragePrice);
 
@@ -81,7 +81,7 @@ function inputMyOwnMoney() {
   while (true) {
     // 문자가 들어있을 경우
     if (isNaN(myMoney) && myMoney !== null) {
-      alert("숫자를 입력해주세요.");
+      alert("금액 입력해주세요.");
       myMoney = prompt("소지금을 입력해주세요!");
       continue;
     }
@@ -105,14 +105,21 @@ function deposit() {
   // 입금액을 입력하지 않은 경우
   if (inpCreditEl.value.length === 0) return alert("입금액을 입력해주세요.");
 
+  if (isNaN(inpCreditEl.value)) {
+    alert("금액을 입력해주세요.");
+    return (inpCreditEl.value = ""); // 입금액 빈 칸으로
+  }
+
   // 입금액이 소지금보다 큰 경우
   if (parseInt(inpCreditEl.value, 10) > myMoney) {
-    const cf = confirm("소지금이 부족합니다. 소지금을 입력 및 수정하시겠습니까?");
+    const cf = confirm(
+      "소지금이 부족합니다. 소지금을 입력 및 수정하시겠습니까?"
+    );
     if (cf) {
       inputMyOwnMoney(); // 소지금 입력하기
     }
 
-    return (inpCreditEl.value = ""); // 다시 빈 칸
+    return (inpCreditEl.value = ""); // 입금액 빈 칸으로
   }
 
   txtBalanceEl.textContent =
@@ -126,7 +133,6 @@ btnCreditEl.addEventListener("click", deposit);
 inpCreditEl.addEventListener("keyup", (e) => {
   if (e.keyCode === 13) deposit();
 });
-
 
 // 거스름돈 반환
 btnBalanceEL.addEventListener("click", () => {
@@ -163,8 +169,8 @@ beverageItemEL.forEach((el) => {
       beverageCartItem.forEach((cartItem) => {
         // 자판기의 음료id와 카트의 음료id를 가져와서 있는지 확인하기
         const beverageId = el.querySelector(".beverageId").getAttribute("id");
-        const beverageIdInCart = cartItem
-          .querySelector(".beverageIdInCart").value;
+        const beverageIdInCart =
+          cartItem.querySelector(".beverageIdInCart").value;
 
         if (beverageId === beverageIdInCart) {
           let cartQuantity = cartItem.querySelector(".cart-quantity");
@@ -230,8 +236,8 @@ function updateCartListItem() {
 
   // 카트 아이템이 들어오면 가장 최신 카트 아이템에 이벤트 리스너 설정
   const lastedCartItem = cartListItem[cartListItem.length - 1];
-  const beverageIdInCart = lastedCartItem
-    .querySelector(".beverageIdInCart").value;
+  const beverageIdInCart =
+    lastedCartItem.querySelector(".beverageIdInCart").value;
 
   const beverageNameInCart =
     lastedCartItem.querySelector(".cart-name").textContent;
@@ -270,7 +276,7 @@ btnGetEl.addEventListener("click", () => {
     totalPrice =
       parseInt(totalPrice, 10) + parseInt(price, 10) * parseInt(quantity, 10);
   });
-  
+
   if (myBalance < totalPrice) return alert("소지금이 부족합니다");
 
   // 잔액에서 총 구매가격 빼기
@@ -288,11 +294,9 @@ btnGetEl.addEventListener("click", () => {
     // myBeveragesList 루프 돌면서 같은 아이디 있으면 카트에 있는 수량만 증가
     let changeQuantity = false;
     for (let i = 0; i < myBeveragesList.length; i++) {
-      if (
-        myBeveragesList[i]["beverageId"] === beverageId
-      ) {
-        myBeveragesList[i]["beverageQuantity"] =
-          parseInt(myBeveragesList[i]["beverageQuantity"], 10) +
+      if (myBeveragesList[i].beverageId === beverageId) {
+        myBeveragesList[i].beverageQuantity =
+          parseInt(myBeveragesList[i].beverageQuantity, 10) +
           parseInt(beverageQuantityInCart, 10);
         changeQuantity = true;
       }
@@ -332,23 +336,23 @@ function renderMyBeverageList() {
 
     const myBeverageImgEl = document.createElement("img");
     myBeverageImgEl.classList.add("img-myBeverage");
-    myBeverageImgEl.src = item["beverageSource"];
+    myBeverageImgEl.src = item.beverageSource;
     myBeverageLi.appendChild(myBeverageImgEl);
 
     const myBeverageNameEl = document.createElement("strong");
     myBeverageNameEl.classList.add("name-myBeverage");
-    myBeverageNameEl.textContent = item["beverageName"];
+    myBeverageNameEl.textContent = item.beverageName;
     myBeverageLi.appendChild(myBeverageNameEl);
 
     const myBeverageQuantityEl = document.createElement("span");
     myBeverageQuantityEl.classList.add("quantity-myBeverage");
-    myBeverageQuantityEl.textContent = item["beverageQuantity"];
+    myBeverageQuantityEl.textContent = item.beverageQuantity;
     myBeverageLi.appendChild(myBeverageQuantityEl);
 
     contMyBeverageListEl.appendChild(myBeverageLi);
 
     // 내가 구매한 총가격 구하기
-    myTotalPrice = myTotalPrice + item["beverageQuantity"] * item["beveragePrice"];
+    myTotalPrice = myTotalPrice + item.beverageQuantity * item.beveragePrice;
   });
 
   txtTotalPriceEl.textContent = toKRW(myTotalPrice);
