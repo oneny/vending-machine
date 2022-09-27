@@ -1,13 +1,13 @@
 # 벤딩 머신
 
-### [데모 사이트](http://127.0.0.1:5500/vending-machine/index.html)
+### [데모 사이트](https://oneny.github.io/vending-machine/)
 
 ### 기능 구현
 
 <details>
   <summary>자판기 음료수 목록 만들기</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L29)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L29)
 
 ```html
 <ul class="cont-lists">
@@ -70,7 +70,7 @@ beverages.forEach((item) => {
 <details>
   <summary>자판기 음료수 버튼</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L136)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L136)
 
 ```js
 const beverageItemEL = beveragesList.querySelectorAll("li");
@@ -140,7 +140,7 @@ if (!change) {
 <details>
   <summary>카트 리스트 버튼</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L218)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L218)
 
 ```js
 // 카트 리스트 수량 내리고 자판기 수량 올리고 카트 리스트 아이템의 수량 0이 되면 제거
@@ -189,7 +189,7 @@ function updateCartListItem() {
 <details>
   <summary>획득 버튼 구현</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L250)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L250)
 
 ```js
 // 총 가격 비교하고 아니면 그냥 리턴
@@ -255,7 +255,7 @@ cartItems.forEach((el) => {
 <details>
   <summary>획득한 음료 리스트 렌더링</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L311)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L311)
 
 ```html
 <ul class="cont-myBeverageList"></ul>
@@ -301,10 +301,11 @@ function renderMyBeverageList() {
 <details>
   <summary>소지금 입력하기</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L75)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L75)
 
 ```js
-txtMyMoneyEl.addEventListener("click", (e) => {
+// 소지금 입력하기
+function inputMyOwnMoney() {
   let myMoney = prompt("소지금을 입력해주세요!");
 
   while (true) {
@@ -320,8 +321,10 @@ txtMyMoneyEl.addEventListener("click", (e) => {
     break;
   }
 
-  e.target.textContent = toKRW(myMoney) + " 원";
-});
+  txtMyMoneyEl.textContent = toKRW(myMoney) + " 원";
+}
+
+txtMyMoneyEl.addEventListener("click", inputMyOwnMoney);
 ```
 
 - 소지금을 입력했을 때 만약 문자가 섞여있다면 다시 입력하도록 설정
@@ -334,9 +337,10 @@ txtMyMoneyEl.addEventListener("click", (e) => {
 <details>
   <summary>입금하기</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L95)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L95)
 
 ```js
+// 입금하기
 function deposit() {
   // 소지금, 잔액
   const myMoney = toNum(txtMyMoneyEl.textContent);
@@ -345,9 +349,16 @@ function deposit() {
   // 입금액을 입력하지 않은 경우
   if (inpCreditEl.value.length === 0) return alert("입금액을 입력해주세요.");
 
+  // 입금액이 소지금보다 큰 경우
   if (parseInt(inpCreditEl.value, 10) > myMoney) {
-    alert("소지금이 부족합니다.");
-    return (inpCreditEl.value = "");
+    const cf = confirm(
+      "소지금이 부족합니다. 소지금을 입력 및 수정하시겠습니까?"
+    );
+    if (cf) {
+      inputMyOwnMoney(); // 소지금 입력하기
+    }
+
+    return (inpCreditEl.value = ""); // 다시 빈 칸
   }
 
   txtBalanceEl.textContent =
@@ -363,7 +374,9 @@ inpCreditEl.addEventListener("keyup", (e) => {
 });
 ```
 
-- 입금하기 경우, input 요소에 아무것도 적지 않았거나 소지금보다 많으면 경고만 하도록 작성했다.
+- 입금하기 경우, input 요소에 아무것도 적지 않았거나 소지금보다 많으면 소지금 입력하겠냐는 알림을 통해
+  - **확인** 누르면 소지금 입력할 수 있도록 작성했다.
+  - **취소** 누르면 입금액을 빈 칸만 만들고 종료한다.
 - 그리고 클릭이나 input 요소에 focus 상태에서 enter키를 누르면 해당 이벤트가 발생하도록 작성했다.
 
 </details>
@@ -371,7 +384,7 @@ inpCreditEl.addEventListener("keyup", (e) => {
 <details>
   <summary>거스름돈 반환</summary>
 
-[코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L122)
+- [코드 보러가기](https://github.com/oneny/vending-machine/blob/main/js/main.js#L122)
 
 ```js
 btnBalanceEL.addEventListener("click", () => {
